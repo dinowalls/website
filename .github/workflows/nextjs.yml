@@ -73,9 +73,10 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
-      - name: Install lightningcss native binary (Linux)
+      - name: Install native CSS/oxide bindings (Linux)
         if: runner.os == 'Linux'
-        run: npm install lightningcss-linux-x64-gnu@1.30.1 --no-save
+        run: |
+          npm install lightningcss-linux-x64-gnu@1.30.1 @tailwindcss/oxide-linux-x64-gnu@4.1.13 --no-save
       - name: Build with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
       - name: Upload artifact
