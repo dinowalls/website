@@ -138,6 +138,13 @@ export const Navbar01 = React.forwardRef<HTMLElement, Navbar01Props>(
       const id = requestAnimationFrame(() => setEntered(true));
       return () => cancelAnimationFrame(id);
     }, []);
+
+    const buildClickHandler = (cb?: () => void) => (event: React.MouseEvent) => {
+      if (!cb) return;
+      event.preventDefault();
+      cb();
+    };
+
     // Combine refs
     const combinedRef = React.useCallback((node: HTMLElement | null) => {
       containerRef.current = node;
@@ -180,8 +187,8 @@ export const Navbar01 = React.forwardRef<HTMLElement, Navbar01Props>(
                   <NavigationMenuList className="flex-col items-start gap-1 w-full">
                     {navigationLinks.map((link, index) => (
                       <NavigationMenuItem key={index} className="w-full">
-                        <button
-                          onClick={(e) => e.preventDefault()}
+                        <NavigationMenuLink
+                          href={link.href}
                           className={cn(
                             "flex w-full items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer no-underline",
                             link.active 
@@ -190,7 +197,7 @@ export const Navbar01 = React.forwardRef<HTMLElement, Navbar01Props>(
                           )}
                         >
                           {link.label}
-                        </button>
+                        </NavigationMenuLink>
                       </NavigationMenuItem>
                     ))}
                   </NavigationMenuList>
@@ -200,23 +207,23 @@ export const Navbar01 = React.forwardRef<HTMLElement, Navbar01Props>(
             )}
             {/* Main nav */}
             <div className="flex items-center gap-6">
-              <button 
-                onClick={(e) => e.preventDefault()}
+              <a 
+                href={logoHref}
                 className="flex items-center space-x-2 text-primary hover:text-primary/90 transition-colors cursor-pointer"
               >
                 <div className="text-2xl">
                   {logo}
                 </div>
                 <span className="hidden font-bold text-xl sm:inline-block">dinowalls</span>
-              </button>
+              </a>
               {/* Navigation menu */}
               {!isMobile && (
                 <NavigationMenu className="flex">
                 <NavigationMenuList className="gap-1">
                   {navigationLinks.map((link, index) => (
                     <NavigationMenuItem key={index}>
-                      <button
-                        onClick={(e) => e.preventDefault()}
+                      <NavigationMenuLink
+                        href={link.href}
                         className={cn(
                           "group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 cursor-pointer no-underline",
                           link.active 
@@ -225,7 +232,7 @@ export const Navbar01 = React.forwardRef<HTMLElement, Navbar01Props>(
                         )}
                       >
                         {link.label}
-                      </button>
+                      </NavigationMenuLink>
                     </NavigationMenuItem>
                   ))}
                 </NavigationMenuList>
@@ -239,22 +246,18 @@ export const Navbar01 = React.forwardRef<HTMLElement, Navbar01Props>(
               variant="ghost"
               size="sm"
               className="text-sm font-medium hover:bg-accent hover:text-accent-foreground"
-              onClick={(e) => {
-                e.preventDefault();
-                if (onSignInClick) onSignInClick();
-              }}
+              asChild
+              onClick={buildClickHandler(onSignInClick)}
             >
-              {signInText}
+              <a href={signInHref}>{signInText}</a>
             </Button>
             <Button
               size="sm"
               className="text-sm font-medium px-4 h-9 rounded-md shadow-sm"
-              onClick={(e) => {
-                e.preventDefault();
-                if (onCtaClick) onCtaClick();
-              }}
+              asChild
+              onClick={buildClickHandler(onCtaClick)}
             >
-              {ctaText}
+              <a href={ctaHref}>{ctaText}</a>
             </Button>
           </div>
         </div>

@@ -205,14 +205,17 @@ function BackgroundSlideshow({
         }}
       />
 
-      {/* previous image (fading out) - use <img> so browser decodes and composes pixels */}
+      {/* previous image (fading out) - use next/image for optimized decode/compositing */}
       {prev != null && (
-        <img
+        <Image
           key={`prev-${prev}`}
           src={images[prev]}
           alt=""
           aria-hidden
-          className="absolute inset-0 w-full h-full object-cover"
+          fill
+          priority
+          sizes="100vw"
+          className="absolute inset-0 object-cover"
           style={{
             opacity: prevVisible ? 1 : 0,
             transition: `opacity ${duration}ms ease`,
@@ -222,12 +225,15 @@ function BackgroundSlideshow({
       )}
 
       {/* current image (fading in) */}
-      <img
+      <Image
         key={`current-${current}`}
         src={images[current]}
         alt=""
         aria-hidden
-        className="absolute inset-0 w-full h-full object-cover"
+        fill
+        priority
+        sizes="100vw"
+        className="absolute inset-0 object-cover"
         onLoad={(e) => {
           // normalize loaded src to pathname so it matches the keys used elsewhere
           let srcPath: string

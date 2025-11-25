@@ -1,3 +1,5 @@
+import Image from "next/image"
+
 export function WallpaperMarquee() {
   const wallpapers = [
     {
@@ -71,10 +73,12 @@ export function WallpaperMarquee() {
             {duplicatedWallpapers.map((wallpaper, index) => (
               <div key={`left-${wallpaper.id}-${index}`} className="relative group cursor-pointer">
                 <div className="aspect-[3/4] h-64 md:h-72 lg:h-80 rounded-2xl relative overflow-hidden bg-muted">
-                  <img
+                  <Image
                     src={wallpaper.image || "/placeholder.svg"}
                     alt={wallpaper.title}
-                    className="absolute inset-0 w-full h-full object-cover block transition-transform duration-300 group-hover:scale-105"
+                    fill
+                    sizes="(min-width: 1024px) 16rem, (min-width: 768px) 14rem, 12rem"
+                    className="absolute inset-0 object-cover block transition-transform duration-300 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/0 via-black/0 to-transparent group-hover:from-black/50 group-hover:via-black/10 transition-all duration-300" />
                   <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -93,10 +97,12 @@ export function WallpaperMarquee() {
             {duplicatedWallpapers.slice(2).map((wallpaper, index) => (
               <div key={`center-${wallpaper.id}-${index}`} className="relative group cursor-pointer">
                 <div className="aspect-[3/4] h-64 md:h-72 lg:h-80 rounded-2xl relative overflow-hidden bg-muted">
-                  <img
+                  <Image
                     src={wallpaper.image || "/placeholder.svg"}
                     alt={wallpaper.title}
-                    className="absolute inset-0 w-full h-full object-cover block transition-transform duration-300 group-hover:scale-105"
+                    fill
+                    sizes="(min-width: 1024px) 16rem, (min-width: 768px) 14rem, 12rem"
+                    className="absolute inset-0 object-cover block transition-transform duration-300 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/0 via-black/0 to-transparent group-hover:from-black/50 group-hover:via-black/10 transition-all duration-300" />
                   <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -115,10 +121,12 @@ export function WallpaperMarquee() {
             {duplicatedWallpapers.slice(4).map((wallpaper, index) => (
               <div key={`right-${wallpaper.id}-${index}`} className="relative group cursor-pointer">
                 <div className="aspect-[3/4] h-64 md:h-72 lg:h-80 rounded-2xl relative overflow-hidden bg-muted">
-                  <img
+                  <Image
                     src={wallpaper.image || "/placeholder.svg"}
                     alt={wallpaper.title}
-                    className="absolute inset-0 w-full h-full object-cover block transition-transform duration-300 group-hover:scale-105"
+                    fill
+                    sizes="(min-width: 1024px) 16rem, (min-width: 768px) 14rem, 12rem"
+                    className="absolute inset-0 object-cover block transition-transform duration-300 group-hover:scale-105"
                   />
                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/0 via-black/0 to-transparent group-hover:from-black/50 group-hover:via-black/10 transition-all duration-300" />
                   <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">

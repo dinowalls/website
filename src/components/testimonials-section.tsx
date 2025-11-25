@@ -53,7 +53,7 @@ export function TestimonialsSection() {
                   ))}
                 </div>
 
-                <p className="text-muted-foreground leading-relaxed">"{testimonial.content}"</p>
+                <p className="text-muted-foreground leading-relaxed">&ldquo;{testimonial.content}&rdquo;</p>
 
                 <div className="flex items-center gap-3 pt-4 border-t">
                   <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-lg">
