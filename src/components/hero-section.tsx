@@ -197,12 +197,12 @@ export function HeroSection() {
           <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.75),_rgba(255,255,255,0)_65%)] dark:bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.1),_rgba(255,255,255,0)_65%)]" />
           <div className="relative w-[13.75rem] shrink-0 sm:w-[15.5rem] lg:w-[17rem]">
             <div className="absolute inset-[2.3%_4.6%_2.2%_4.6%] z-0 pointer-events-none overflow-visible rounded-[2rem] sm:rounded-[2.25rem]">
-              <div className="hero-screen-glow absolute inset-0 rounded-[inherit]">
+              <div className="hero-screen-glow absolute inset-0">
                 <WallpaperLayers
                   currentIndex={currentIndex}
                   incomingIndex={incomingIndex}
-                  className="absolute inset-0 rounded-[inherit]"
-                  imageClassName="scale-[1.06]"
+                  className="hero-screen-glow-image absolute inset-0 rounded-[inherit] overflow-hidden"
+                  imageClassName="scale-[1.08]"
                 />
               </div>
             </div>

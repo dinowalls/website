@@ -16,6 +16,7 @@ const FRAME_CACHE_NAME = "dinowalls-heic-frames-v1"
 type SharedWallpaperPageProps = {
   wallpaper: PublicWallpaper | null
   sharePath: string
+  isLoading?: boolean
 }
 
 function CrossfadeFrame({
@@ -212,9 +213,13 @@ async function getAnimatedFrames(sourceUrl: string): Promise<string[]> {
   return frameUrls
 }
 
-export function SharedWallpaperPage({ wallpaper, sharePath }: SharedWallpaperPageProps) {
+export function SharedWallpaperPage({
+  wallpaper,
+  sharePath,
+  isLoading = false,
+}: SharedWallpaperPageProps) {
   const deepLink = wallpaper ? `dinowalls://wallpapers/${wallpaper.id}` : undefined
-  const title = wallpaper?.title || "Shared wallpaper"
+  const title = wallpaper?.title || (isLoading ? "Loading wallpaper..." : "Shared wallpaper")
   const previewSource = wallpaper?.previewUrl || wallpaper?.heicUrl
   const fallbackImage = wallpaper?.thumbnailUrl || wallpaper?.imageUrl || ""
   const [animatedFrames, setAnimatedFrames] = useState<string[]>([])
@@ -360,7 +365,7 @@ export function SharedWallpaperPage({ wallpaper, sharePath }: SharedWallpaperPag
                   Dinowalls
                 </p>
                 <h1 className="pt-2 text-2xl font-medium tracking-[-0.04em] text-white sm:text-3xl">
-                  {wallpaper ? title : "Wallpaper unavailable"}
+                  {wallpaper ? title : isLoading ? "Loading wallpaper..." : "Wallpaper unavailable"}
                 </h1>
               </div>
             </div>
@@ -402,7 +407,7 @@ export function SharedWallpaperPage({ wallpaper, sharePath }: SharedWallpaperPag
                 Back to Dinowalls
                 <ArrowUpRight className="size-4" />
               </Link>
-              {!wallpaper ? <p className="pt-3 text-xs text-white/45">{sharePath}</p> : null}
+              {!wallpaper && !isLoading ? <p className="pt-3 text-xs text-white/45">{sharePath}</p> : null}
             </div>
           </div>
         </div>

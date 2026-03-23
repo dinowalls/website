@@ -264,23 +264,27 @@
   }
 
   .hero-screen-glow {
-    opacity: 0.72;
-    filter: saturate(1.08) blur(22px);
-    -webkit-mask-image: radial-gradient(ellipse 82% 70% at center, rgba(0, 0, 0, 0.94) 0%, rgba(0, 0, 0, 0.72) 36%, rgba(0, 0, 0, 0.34) 62%, rgba(0, 0, 0, 0.12) 78%, transparent 100%);
-    mask-image: radial-gradient(ellipse 82% 70% at center, rgba(0, 0, 0, 0.94) 0%, rgba(0, 0, 0, 0.72) 36%, rgba(0, 0, 0, 0.34) 62%, rgba(0, 0, 0, 0.12) 78%, transparent 100%);
+    inset: 0;
     animation: hero-screen-glow 8s ease-in-out infinite;
     transform-origin: center;
-    transform: scale(1.16);
-    will-change: transform, opacity;
+    transform: scale(1.18);
+    will-change: transform;
+  }
+
+  .hero-screen-glow-image {
+    opacity: 0.42;
+    filter: saturate(1.04) blur(34px);
+    transform: scale(1);
+    transform-origin: center;
   }
 
   @keyframes hero-screen-glow {
     0%,
     100% {
-      transform: scale(1.14);
+      transform: scale(1.16);
     }
     50% {
-      transform: scale(1.19);
+      transform: scale(1.22);
     }
   }
 }
