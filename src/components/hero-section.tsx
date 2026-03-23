@@ -17,33 +17,32 @@ const heroFrames = [
 ]
 
 function WallpaperLayers({
-  currentIndex,
-  incomingIndex,
+  layerIndexes,
+  activeLayer,
   imageClassName,
+  layerClassName,
+  frameClassName,
   className,
 }: {
-  currentIndex: number
-  incomingIndex: number | null
+  layerIndexes: [number, number]
+  activeLayer: 0 | 1
   imageClassName?: string
+  layerClassName?: string
+  frameClassName?: string
   className?: string
 }) {
   return (
     <div className={className}>
-      <div
-        className={`absolute inset-0 bg-cover bg-center ${imageClassName ?? ""}`}
-        style={{
-          backgroundImage: `url(${heroFrames[currentIndex].imageUrl})`,
-        }}
-      />
-      {incomingIndex !== null ? (
+      {layerIndexes.map((frameIndex, index) => (
         <div
-          key={`incoming-${heroFrames[incomingIndex].imageUrl}`}
-          className={`hero-crossfade-in absolute inset-0 bg-cover bg-center ${imageClassName ?? ""}`}
+          key={`${index}-${heroFrames[frameIndex].imageUrl}`}
+          className={`absolute inset-0 bg-cover bg-center transition-opacity duration-[1200ms] ease-out ${frameClassName ?? ""} ${imageClassName ?? ""} ${layerClassName ?? ""}`}
           style={{
-            backgroundImage: `url(${heroFrames[incomingIndex].imageUrl})`,
+            backgroundImage: `url(${heroFrames[frameIndex].imageUrl})`,
+            opacity: activeLayer === index ? 1 : 0,
           }}
         />
-      ) : null}
+      ))}
     </div>
   )
 }
@@ -71,10 +70,12 @@ function minutesToFrameIndex(minutes: number) {
 export function HeroSection() {
   const initialIndex = useMemo(() => minutesToFrameIndex(getCurrentMinutes()), [])
   const [currentIndex, setCurrentIndex] = useState(initialIndex)
-  const [incomingIndex, setIncomingIndex] = useState<number | null>(null)
+  const [layerIndexes, setLayerIndexes] = useState<[number, number]>([initialIndex, initialIndex])
+  const [activeLayer, setActiveLayer] = useState<0 | 1>(0)
   const fadeTimeoutRef = useRef<number | null>(null)
+  const fadeRafRef = useRef<number | null>(null)
   const currentIndexRef = useRef(initialIndex)
-  const incomingIndexRef = useRef<number | null>(null)
+  const activeLayerRef = useRef<0 | 1>(0)
 
   useEffect(() => {
     heroFrames.forEach((frame) => {
@@ -88,33 +89,49 @@ export function HeroSection() {
   }, [currentIndex])
 
   useEffect(() => {
-    incomingIndexRef.current = incomingIndex
-  }, [incomingIndex])
+    activeLayerRef.current = activeLayer
+  }, [activeLayer])
 
   useEffect(() => {
     return () => {
       if (fadeTimeoutRef.current != null) {
         window.clearTimeout(fadeTimeoutRef.current)
       }
+      if (fadeRafRef.current != null) {
+        cancelAnimationFrame(fadeRafRef.current)
+      }
     }
   }, [])
 
   const startTransition = (nextIndex: number) => {
-    if (nextIndex === currentIndexRef.current || nextIndex === incomingIndexRef.current) return
+    if (nextIndex === currentIndexRef.current) return
 
     if (fadeTimeoutRef.current != null) {
       window.clearTimeout(fadeTimeoutRef.current)
       fadeTimeoutRef.current = null
     }
 
-    incomingIndexRef.current = nextIndex
-    setIncomingIndex(nextIndex)
+    if (fadeRafRef.current != null) {
+      cancelAnimationFrame(fadeRafRef.current)
+      fadeRafRef.current = null
+    }
+
+    const nextLayer = activeLayerRef.current === 0 ? 1 : 0
+
+    setLayerIndexes((previous) =>
+      nextLayer === 0 ? [nextIndex, previous[1]] : [previous[0], nextIndex],
+    )
+
+    fadeRafRef.current = requestAnimationFrame(() => {
+      fadeRafRef.current = requestAnimationFrame(() => {
+        activeLayerRef.current = nextLayer
+        setActiveLayer(nextLayer)
+      })
+    })
 
     fadeTimeoutRef.current = window.setTimeout(() => {
       currentIndexRef.current = nextIndex
-      incomingIndexRef.current = null
       setCurrentIndex(nextIndex)
-      setIncomingIndex(null)
       fadeTimeoutRef.current = null
     }, 1200)
   }
@@ -199,18 +216,19 @@ export function HeroSection() {
             <div className="absolute inset-[2.3%_4.6%_2.2%_4.6%] z-0 pointer-events-none overflow-visible rounded-[2rem] sm:rounded-[2.25rem]">
               <div className="hero-screen-glow absolute inset-0">
                 <WallpaperLayers
-                  currentIndex={currentIndex}
-                  incomingIndex={incomingIndex}
-                  className="hero-screen-glow-image absolute inset-0 rounded-[inherit] overflow-hidden"
-                  imageClassName="scale-[1.08]"
+                  layerIndexes={layerIndexes}
+                  activeLayer={activeLayer}
+                  className="hero-screen-glow-image absolute inset-0 rounded-[inherit]"
+                  layerClassName="hero-screen-glow-layer"
+                  frameClassName="-inset-[14%]"
                 />
               </div>
             </div>
 
             <div className="absolute inset-[2.3%_4.6%_2.2%_4.6%] overflow-hidden rounded-[2rem] bg-slate-900 sm:rounded-[2.25rem]">
               <WallpaperLayers
-                currentIndex={currentIndex}
-                incomingIndex={incomingIndex}
+                layerIndexes={layerIndexes}
+                activeLayer={activeLayer}
                 className="absolute inset-0"
               />
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.12),transparent_26%,transparent_72%,rgba(15,23,42,0.18))]" />

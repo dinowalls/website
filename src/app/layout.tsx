@@ -17,6 +17,11 @@ export const metadata: Metadata = {
   description:
     "Transform your iPhone with dynamic wallpapers that change throughout the day. Create AI-powered wallpapers or explore our free catalog.",
   generator: "v0.app",
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    shortcut: "/icon.svg",
+    apple: "/app-icon.png",
+  },
 }
 
 export default function RootLayout({
