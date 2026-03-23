@@ -233,6 +233,10 @@
     animation: marquee-vertical var(--duration) linear infinite;
   }
 
+  .animate-marquee-vertical-reverse {
+    animation: marquee-vertical var(--duration) linear infinite reverse;
+  }
+
   .hero-shell-gradient {
     background-image:
       radial-gradient(circle at top left, rgba(255, 211, 136, 0.28), transparent 30%),

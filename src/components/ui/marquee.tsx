@@ -31,10 +31,15 @@ interface MarqueeProps extends ComponentPropsWithoutRef<"div"> {
    * @default 4
    */
   repeat?: number
+  /**
+   * Optional CSS class name to apply to each animated content track
+   */
+  itemClassName?: string
 }
 
 export function Marquee({
   className,
+  itemClassName,
   reverse = false,
   pauseOnHover = false,
   children,
@@ -46,7 +51,7 @@ export function Marquee({
     <div
       {...props}
       className={cn(
-        "group flex gap-(--gap) overflow-hidden p-2 [--duration:40s] [--gap:1rem]",
+        "group flex gap-(--gap) overflow-hidden [--duration:40s] [--gap:1rem]",
         {
           "flex-row": !vertical,
           "flex-col": vertical,
@@ -59,12 +64,17 @@ export function Marquee({
         .map((_, i) => (
           <div
             key={i}
-            className={cn("flex shrink-0 justify-around gap-(--gap)", {
-              "animate-marquee flex-row": !vertical,
-              "animate-marquee-vertical flex-col": vertical,
-              "group-hover:[animation-play-state:paused]": pauseOnHover,
-              "[animation-direction:reverse]": reverse,
-            })}
+            className={cn(
+              "flex shrink-0 justify-around gap-(--gap)",
+              {
+                "animate-marquee flex-row": !vertical,
+                "animate-marquee-vertical w-full flex-col": vertical && !reverse,
+                "animate-marquee-vertical-reverse w-full flex-col": vertical && reverse,
+                "[animation-direction:reverse]": !vertical && reverse,
+                "group-hover:[animation-play-state:paused]": pauseOnHover,
+              },
+              itemClassName
+            )}
           >
             {children}
           </div>
