@@ -1,146 +1,94 @@
 import Image from "next/image"
+import type { PublicWallpaper } from "@/lib/appwrite-wallpapers"
+import { cn } from "@/lib/utils"
+import { Marquee } from "@/components/ui/marquee"
 
-export function WallpaperMarquee() {
-  const wallpapers = [
-    {
-      id: 1,
-      title: "Mountain Dawn",
-      category: "Nature",
-      image: "/mountain-sunrise-landscape-wallpaper.jpg",
-    },
-    {
-      id: 2,
-      title: "City Lights",
-      category: "Urban",
-      image: "/city-skyline-night-lights-wallpaper.jpg",
-    },
-    {
-      id: 3,
-      title: "Ocean Waves",
-      category: "Nature",
-      image: "/ocean-waves-sunset-wallpaper.jpg",
-    },
-    {
-      id: 4,
-      title: "Abstract Flow",
-      category: "Abstract",
-      image: "/abstract-flowing-colors-wallpaper.jpg",
-    },
-    {
-      id: 5,
-      title: "Forest Path",
-      category: "Nature",
-      image: "/forest-path-morning-light-wallpaper.jpg",
-    },
-    {
-      id: 6,
-      title: "Neon Dreams",
-      category: "Abstract",
-      image: "/neon-cyberpunk-abstract-wallpaper.jpg",
-    },
-    {
-      id: 7,
-      title: "Desert Dunes",
-      category: "Nature",
-      image: "/desert-sand-dunes-golden-hour-wallpaper.jpg",
-    },
-    {
-      id: 8,
-      title: "Space Nebula",
-      category: "Space",
-      image: "/space-nebula-stars-galaxy-wallpaper.jpg",
-    },
-  ]
+function WallpaperCard({
+  image,
+  title,
+}: {
+  image: string
+  title: string
+}) {
+  return (
+    <figure
+      className={cn(
+        "group relative w-[15rem] cursor-pointer overflow-hidden rounded-[1.8rem] border border-white/65 bg-white/75 p-2 shadow-[0_20px_55px_-35px_rgba(15,23,42,0.4)] backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:bg-white/90 dark:border-white/10 dark:bg-slate-900/70 dark:hover:bg-slate-900/85 sm:w-[17rem]"
+      )}
+    >
+      <div className="relative aspect-[4/5] overflow-hidden rounded-[1.2rem] bg-slate-200">
+        <Image
+          src={image}
+          alt={title}
+          fill
+          sizes="(min-width: 640px) 17rem, 15rem"
+          className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),transparent_35%,rgba(15,23,42,0.18)_100%)]" />
+      </div>
+      <div className="px-1 pb-1 pt-4">
+        <figcaption className="truncate text-base font-semibold tracking-[-0.03em] text-slate-950 dark:text-white">
+          {title}
+        </figcaption>
+      </div>
+    </figure>
+  )
+}
 
-  // Duplicate the array to create seamless loop
-  const duplicatedWallpapers = [...wallpapers, ...wallpapers]
+export function WallpaperMarquee({ wallpapers }: { wallpapers: PublicWallpaper[] }) {
+  const galleryWallpapers = wallpapers.map((wallpaper) => ({
+    id: wallpaper.id,
+    title: wallpaper.title,
+    image: wallpaper.imageUrl,
+  }))
+  const firstColumn = galleryWallpapers.filter((_, index) => index % 3 === 0)
+  const secondColumn = galleryWallpapers.filter((_, index) => index % 3 === 1)
+  const thirdColumn = galleryWallpapers.filter((_, index) => index % 3 === 2)
 
   return (
-    <section className="py-20 bg-gradient-to-b from-background to-muted/20">
-      <div className="container mx-auto px-4 mb-12">
-        <div className="text-center max-w-3xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-balance mb-4">Thousands of Dynamic Wallpapers</h2>
-          <p className="text-lg text-muted-foreground text-pretty">
-            Discover our ever-growing collection of wallpapers that transform throughout the day
-          </p>
+    <section id="gallery" className="overflow-hidden px-5 py-20 sm:px-8 lg:px-10 lg:py-28">
+      <div className="mx-auto mb-12 flex max-w-7xl flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <div className="max-w-2xl">
+          <p className="text-sm font-medium uppercase tracking-[0.28em] text-slate-500 dark:text-slate-400">Gallery</p>
+          <h2 className="mt-3 text-4xl font-semibold tracking-[-0.05em] text-slate-950 dark:text-white sm:text-5xl [font-family:var(--font-display)]">
+            A wallpaper library with actual atmosphere.
+          </h2>
         </div>
+        <p className="max-w-md text-base leading-7 text-slate-600 dark:text-slate-300 sm:text-lg">
+          Browse nature, abstract, and city sets that feel different at 7 AM than they do after dark.
+        </p>
       </div>
 
-      <div className="relative max-h-[600px] max-w-[1000px] overflow-hidden container mx-auto px-4">
-        {/* Left column - scrolling up */}
-        <div className="absolute left-4 md:left-8 lg:left-16 w-48 md:w-56 lg:w-64 h-full">
-          <div className="animate-marquee-up space-y-4">
-            {duplicatedWallpapers.map((wallpaper, index) => (
-              <div key={`left-${wallpaper.id}-${index}`} className="relative group cursor-pointer">
-                <div className="aspect-[3/4] h-64 md:h-72 lg:h-80 rounded-2xl relative overflow-hidden bg-muted">
-                  <Image
-                    src={wallpaper.image || "/placeholder.svg"}
-                    alt={wallpaper.title}
-                    fill
-                    sizes="(min-width: 1024px) 16rem, (min-width: 768px) 14rem, 12rem"
-                    className="absolute inset-0 object-cover block transition-transform duration-300 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/0 via-black/0 to-transparent group-hover:from-black/50 group-hover:via-black/10 transition-all duration-300" />
-                  <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <p className="font-semibold text-sm text-white drop-shadow-lg">{wallpaper.title}</p>
-                    <p className="text-xs text-white/90 drop-shadow-lg">{wallpaper.category}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Center column - scrolling down */}
-        <div className="mx-auto w-48 md:w-56 lg:w-64 h-full">
-          <div className="animate-marquee-down space-y-4">
-            {duplicatedWallpapers.slice(2).map((wallpaper, index) => (
-              <div key={`center-${wallpaper.id}-${index}`} className="relative group cursor-pointer">
-                <div className="aspect-[3/4] h-64 md:h-72 lg:h-80 rounded-2xl relative overflow-hidden bg-muted">
-                  <Image
-                    src={wallpaper.image || "/placeholder.svg"}
-                    alt={wallpaper.title}
-                    fill
-                    sizes="(min-width: 1024px) 16rem, (min-width: 768px) 14rem, 12rem"
-                    className="absolute inset-0 object-cover block transition-transform duration-300 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/0 via-black/0 to-transparent group-hover:from-black/50 group-hover:via-black/10 transition-all duration-300" />
-                  <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <p className="font-semibold text-sm text-white drop-shadow-lg">{wallpaper.title}</p>
-                    <p className="text-xs text-white/90 drop-shadow-lg">{wallpaper.category}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Right column - scrolling up */}
-        <div className="absolute right-4 md:right-8 lg:right-16 top-0 w-48 md:w-56 lg:w-64 h-full">
-          <div className="animate-marquee-up space-y-4" style={{ animationDelay: "-10s" }}>
-            {duplicatedWallpapers.slice(4).map((wallpaper, index) => (
-              <div key={`right-${wallpaper.id}-${index}`} className="relative group cursor-pointer">
-                <div className="aspect-[3/4] h-64 md:h-72 lg:h-80 rounded-2xl relative overflow-hidden bg-muted">
-                  <Image
-                    src={wallpaper.image || "/placeholder.svg"}
-                    alt={wallpaper.title}
-                    fill
-                    sizes="(min-width: 1024px) 16rem, (min-width: 768px) 14rem, 12rem"
-                    className="absolute inset-0 object-cover block transition-transform duration-300 group-hover:scale-105"
-                  />
-                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/0 via-black/0 to-transparent group-hover:from-black/50 group-hover:via-black/10 transition-all duration-300" />
-                  <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <p className="font-semibold text-sm text-white drop-shadow-lg">{wallpaper.title}</p>
-                    <p className="text-xs text-white/90 drop-shadow-lg">{wallpaper.category}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-background via-background/80 to-transparent pointer-events-none z-20" />
-        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background via-background/80 to-transparent pointer-events-none z-20" />
+      <div className="relative mx-auto grid h-[34rem] max-w-7xl grid-cols-1 items-center justify-center gap-4 overflow-hidden rounded-[2rem] border border-white/60 bg-[linear-gradient(135deg,rgba(255,255,255,0.72),rgba(239,244,250,0.88))] px-3 py-4 shadow-[0_30px_70px_-40px_rgba(15,23,42,0.35)] backdrop-blur-md dark:border-white/8 dark:bg-[linear-gradient(135deg,rgba(15,23,42,0.82),rgba(10,17,29,0.94))] sm:h-[38rem] sm:px-5 sm:py-6 md:grid-cols-3 md:gap-5">
+        <Marquee vertical className="-mt-12 h-full [--duration:58s] [--gap:1.25rem]">
+          {firstColumn.map((wallpaper) => (
+            <WallpaperCard
+              key={wallpaper.id}
+              image={wallpaper.image}
+              title={wallpaper.title}
+            />
+          ))}
+        </Marquee>
+        <Marquee reverse vertical className="hidden h-full md:flex [--duration:62s] [--gap:1.25rem]">
+          {secondColumn.map((wallpaper) => (
+            <WallpaperCard
+              key={wallpaper.id}
+              image={wallpaper.image}
+              title={wallpaper.title}
+            />
+          ))}
+        </Marquee>
+        <Marquee vertical className="mt-10 hidden h-full md:flex [--duration:56s] [--gap:1.25rem]">
+          {thirdColumn.map((wallpaper) => (
+            <WallpaperCard
+              key={wallpaper.id}
+              image={wallpaper.image}
+              title={wallpaper.title}
+            />
+          ))}
+        </Marquee>
+        <div className="gallery-fade-top pointer-events-none absolute inset-x-0 top-0 h-28" />
+        <div className="gallery-fade-bottom pointer-events-none absolute inset-x-0 bottom-0 h-28" />
       </div>
     </section>
   )

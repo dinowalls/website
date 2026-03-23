@@ -1,71 +1,40 @@
-import { Card, CardContent } from "@/components/ui/card"
-import { Star } from "lucide-react"
-
 const testimonials = [
   {
-    name: "Sarah Chen",
-    role: "Designer",
-    content:
-      "Dinowalls completely transformed my iPhone experience. The AI creation feature is incredible - I can generate wallpapers that match my mood perfectly!",
-    rating: 5,
-    avatar: "🦕",
+    label: "Morning",
+    content: "Wake up to light, not the same static lock screen you saw at midnight.",
   },
   {
-    name: "Mike Rodriguez",
-    role: "Student",
-    content:
-      "Love how my wallpaper changes throughout the day. The free catalog has so many amazing options, and the community sharing is fantastic.",
-    rating: 5,
-    avatar: "🦖",
+    label: "Afternoon",
+    content: "Discover scenes that feel crisp at noon and still hold up when the day gets warmer.",
   },
   {
-    name: "Emma Thompson",
-    role: "Artist",
-    content:
-      "The manual creation tools are surprisingly powerful. I've made dozens of dynamic wallpapers and shared them with the community. Highly recommended!",
-    rating: 5,
-    avatar: "🦴",
+    label: "Night",
+    content: "Let the palette settle into dusk automatically without touching a setting.",
   },
 ]
 
 export function TestimonialsSection() {
   return (
-    <section className="py-20 lg:py-32">
-      <div className="container mx-auto px-4">
-        <div className="text-center space-y-4 mb-16">
-          <h2 className="text-3xl lg:text-5xl font-bold text-balance">
-            {"Loved by "}
-            <span className="text-primary">{"Thousands"}</span>
-            {" of Users"}
+    <section id="about" className="px-5 py-20 sm:px-8 lg:px-10 lg:py-28">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-10 max-w-2xl">
+          <p className="text-sm font-medium uppercase tracking-[0.28em] text-slate-500 dark:text-slate-400">Across the day</p>
+          <h2 className="mt-3 text-4xl font-semibold tracking-[-0.05em] text-slate-950 dark:text-white sm:text-5xl [font-family:var(--font-display)]">
+            Designed around time, not just a wallpaper file.
           </h2>
-          <p className="text-xl text-muted-foreground text-pretty max-w-2xl mx-auto">
-            {"Join the growing community of iPhone users who have transformed their devices with Dinowalls."}
-          </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <Card key={index} className="hover:shadow-lg transition-shadow">
-              <CardContent className="p-6 space-y-4">
-                <div className="flex items-center gap-1">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-
-                <p className="text-muted-foreground leading-relaxed">&ldquo;{testimonial.content}&rdquo;</p>
-
-                <div className="flex items-center gap-3 pt-4 border-t">
-                  <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-lg">
-                    {testimonial.avatar}
-                  </div>
-                  <div>
-                    <div className="font-semibold">{testimonial.name}</div>
-                    <div className="text-sm text-muted-foreground">{testimonial.role}</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+        <div className="grid gap-0 border-t border-slate-200/80 dark:border-slate-800 lg:grid-cols-3">
+          {testimonials.map((testimonial) => (
+            <div
+              key={testimonial.label}
+              className="border-b border-slate-200/80 py-8 dark:border-slate-800 lg:border-b-0 lg:border-l lg:px-8 lg:py-0 first:lg:border-l-0"
+            >
+              <p className="text-sm uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">{testimonial.label}</p>
+              <p className="mt-4 max-w-sm text-2xl leading-9 tracking-[-0.03em] text-slate-900 dark:text-white">
+                {testimonial.content}
+              </p>
+            </div>
           ))}
         </div>
       </div>

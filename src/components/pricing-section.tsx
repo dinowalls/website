@@ -1,97 +1,35 @@
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Check, Sparkles, Heart } from "lucide-react"
-
-const plans = [
-  {
-    name: "Free Forever",
-    price: "$0",
-    period: "forever",
-    description: "Perfect for getting started with dynamic wallpapers",
-    badge: "Most Popular",
-    icon: Heart,
-    features: [
-      "Access to entire wallpaper catalog",
-      "Manual wallpaper creation tools",
-      "Community sharing",
-      "Basic time-based transitions",
-      "iOS integration",
-      "Regular catalog updates",
-    ],
-  },
-  {
-    name: "Pro Creator",
-    price: "$4.99",
-    period: "month",
-    description: "Unlock AI creation and advanced features",
-    badge: "Best Value",
-    icon: Sparkles,
-    features: [
-      "Everything in Free",
-      "AI-powered wallpaper generation",
-      "Unlimited AI creations",
-      "Advanced transition effects",
-      "Priority support",
-      "Early access to new features",
-      "Export to other devices",
-    ],
-  },
-]
 
 export function PricingSection() {
   return (
-    <section className="py-20 lg:py-32 bg-muted/30">
-      <div className="container mx-auto px-4">
-        <div className="text-center space-y-4 mb-16">
-          <h2 className="text-3xl lg:text-5xl font-bold text-balance">
-            {"Choose Your "}
-            <span className="text-primary">{"Creative Journey"}</span>
+    <section id="download" className="px-5 py-20 sm:px-8 lg:px-10 lg:py-28">
+      <div className="mx-auto grid max-w-7xl gap-10 rounded-[2.25rem] border border-slate-200/80 bg-[linear-gradient(135deg,rgba(255,255,255,0.96),rgba(243,246,251,0.88))] p-8 shadow-[0_30px_80px_-50px_rgba(15,23,42,0.35)] dark:border-slate-800 dark:bg-[linear-gradient(135deg,rgba(15,23,42,0.75),rgba(10,17,29,0.9))] lg:grid-cols-[1.25fr_0.85fr] lg:p-12">
+        <div className="space-y-5">
+          <p className="text-sm font-medium uppercase tracking-[0.28em] text-slate-500 dark:text-slate-400">Free to browse. Pro to create.</p>
+          <h2 className="max-w-xl text-4xl font-semibold tracking-[-0.05em] text-slate-950 dark:text-white sm:text-5xl [font-family:var(--font-display)]">
+            Start with the catalog, then build your own day cycle.
           </h2>
-          <p className="text-xl text-muted-foreground text-pretty max-w-2xl mx-auto">
-            {"Start free with our complete catalog, or unlock AI creation with Pro. No hidden fees, cancel anytime."}
+          <p className="max-w-2xl text-lg leading-7 text-slate-600 dark:text-slate-300">
+            Explore dynamic wallpapers for free, or unlock AI and creation tools when you want something more personal.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {plans.map((plan, index) => (
-            <Card key={index} className={`relative ${index === 1 ? "border-primary shadow-lg scale-105" : ""}`}>
-              {plan.badge && (
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                  <Badge variant={index === 1 ? "default" : "secondary"}>{plan.badge}</Badge>
-                </div>
-              )}
-
-              <CardHeader className="text-center pb-8">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <plan.icon className="w-8 h-8 text-primary" />
-                </div>
-                <CardTitle className="text-2xl">{plan.name}</CardTitle>
-                <div className="space-y-2">
-                  <div className="text-4xl font-bold">
-                    {plan.price}
-                    <span className="text-lg font-normal text-muted-foreground">/{plan.period}</span>
-                  </div>
-                  <CardDescription className="text-base">{plan.description}</CardDescription>
-                </div>
-              </CardHeader>
-
-              <CardContent className="space-y-6">
-                <ul className="space-y-3">
-                  {plan.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center gap-3">
-                      <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
-                      <span className="text-sm">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <Button className="w-full" variant={index === 1 ? "default" : "outline"} size="lg">
-                  {index === 0 ? "Download Free" : "Start Pro Trial"}
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
+        <div className="grid gap-6 border-t border-slate-200/80 pt-6 dark:border-slate-800 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
+          <div>
+            <p className="text-sm uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">Included free</p>
+            <p className="mt-3 text-xl font-medium text-slate-900 dark:text-white">Discovery, downloads, and time-based wallpapers.</p>
+          </div>
+          <div>
+            <p className="text-sm uppercase tracking-[0.24em] text-slate-400 dark:text-slate-500">Upgrade when ready</p>
+            <p className="mt-3 text-xl font-medium text-slate-900 dark:text-white">AI creation, custom sets, and deeper control.</p>
+          </div>
+          <Button
+            size="lg"
+            className="mt-2 h-12 rounded-full bg-slate-950 px-6 text-sm font-medium text-white hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200"
+            asChild
+          >
+            <a href="#">Download Dinowalls</a>
+          </Button>
         </div>
       </div>
     </section>
