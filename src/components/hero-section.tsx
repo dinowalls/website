@@ -19,13 +19,11 @@ const heroFrames = [
 function WallpaperLayers({
   currentIndex,
   incomingIndex,
-  overlayVisible,
   imageClassName,
   className,
 }: {
   currentIndex: number
   incomingIndex: number | null
-  overlayVisible: boolean
   imageClassName?: string
   className?: string
 }) {
@@ -39,10 +37,10 @@ function WallpaperLayers({
       />
       {incomingIndex !== null ? (
         <div
-          className={`absolute inset-0 bg-cover bg-center transition-opacity duration-[1200ms] ease-out ${imageClassName ?? ""}`}
+          key={`incoming-${heroFrames[incomingIndex].imageUrl}`}
+          className={`hero-crossfade-in absolute inset-0 bg-cover bg-center ${imageClassName ?? ""}`}
           style={{
             backgroundImage: `url(${heroFrames[incomingIndex].imageUrl})`,
-            opacity: overlayVisible ? 1 : 0,
           }}
         />
       ) : null}
@@ -74,10 +72,9 @@ export function HeroSection() {
   const initialIndex = useMemo(() => minutesToFrameIndex(getCurrentMinutes()), [])
   const [currentIndex, setCurrentIndex] = useState(initialIndex)
   const [incomingIndex, setIncomingIndex] = useState<number | null>(null)
-  const [overlayVisible, setOverlayVisible] = useState(false)
-  const fadeRafRef = useRef<number | null>(null)
   const fadeTimeoutRef = useRef<number | null>(null)
   const currentIndexRef = useRef(initialIndex)
+  const incomingIndexRef = useRef<number | null>(null)
 
   useEffect(() => {
     heroFrames.forEach((frame) => {
@@ -91,38 +88,38 @@ export function HeroSection() {
   }, [currentIndex])
 
   useEffect(() => {
-    const clearTransitionHandles = () => {
-      if (fadeRafRef.current != null) {
-        cancelAnimationFrame(fadeRafRef.current)
-        fadeRafRef.current = null
-      }
+    incomingIndexRef.current = incomingIndex
+  }, [incomingIndex])
 
+  useEffect(() => {
+    return () => {
       if (fadeTimeoutRef.current != null) {
         window.clearTimeout(fadeTimeoutRef.current)
-        fadeTimeoutRef.current = null
       }
     }
+  }, [])
 
-    const startTransition = (nextIndex: number) => {
-      if (nextIndex === currentIndexRef.current || nextIndex === incomingIndex) return
+  const startTransition = (nextIndex: number) => {
+    if (nextIndex === currentIndexRef.current || nextIndex === incomingIndexRef.current) return
 
-      clearTransitionHandles()
-      setIncomingIndex(nextIndex)
-      setOverlayVisible(false)
-
-      fadeRafRef.current = requestAnimationFrame(() => {
-        fadeRafRef.current = requestAnimationFrame(() => {
-          setOverlayVisible(true)
-        })
-      })
-
-      fadeTimeoutRef.current = window.setTimeout(() => {
-        setCurrentIndex(nextIndex)
-        setIncomingIndex(null)
-        setOverlayVisible(false)
-      }, 1200)
+    if (fadeTimeoutRef.current != null) {
+      window.clearTimeout(fadeTimeoutRef.current)
+      fadeTimeoutRef.current = null
     }
 
+    incomingIndexRef.current = nextIndex
+    setIncomingIndex(nextIndex)
+
+    fadeTimeoutRef.current = window.setTimeout(() => {
+      currentIndexRef.current = nextIndex
+      incomingIndexRef.current = null
+      setCurrentIndex(nextIndex)
+      setIncomingIndex(null)
+      fadeTimeoutRef.current = null
+    }, 1200)
+  }
+
+  useEffect(() => {
     const timer = window.setInterval(() => {
       const nextIndex = (currentIndexRef.current + 1) % heroFrames.length
       startTransition(nextIndex)
@@ -130,9 +127,8 @@ export function HeroSection() {
 
     return () => {
       window.clearInterval(timer)
-      clearTransitionHandles()
     }
-  }, [incomingIndex])
+  }, [])
 
   const activeWallpaper = heroFrames[currentIndex]
   const wallpaperMoments = useMemo(() => ["Sunrise", "Day", "Sunset", "Night"], [])
@@ -200,14 +196,13 @@ export function HeroSection() {
         <div className="relative flex min-h-[24rem] items-center justify-center self-stretch lg:min-h-0 lg:justify-self-center">
           <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.75),_rgba(255,255,255,0)_65%)] dark:bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.1),_rgba(255,255,255,0)_65%)]" />
           <div className="relative w-[13.75rem] shrink-0 sm:w-[15.5rem] lg:w-[17rem]">
-            <div className="absolute inset-[2.3%_4.6%_2.2%_4.6%] z-0 pointer-events-none">
-              <div className="hero-screen-glow absolute -inset-[15%] rounded-[2.9rem] sm:rounded-[3.2rem]">
+            <div className="absolute inset-[2.3%_4.6%_2.2%_4.6%] z-0 pointer-events-none overflow-visible rounded-[2rem] sm:rounded-[2.25rem]">
+              <div className="hero-screen-glow absolute inset-0 rounded-[inherit]">
                 <WallpaperLayers
                   currentIndex={currentIndex}
                   incomingIndex={incomingIndex}
-                  overlayVisible={overlayVisible}
                   className="absolute inset-0 rounded-[inherit]"
-                  imageClassName="scale-[1.08]"
+                  imageClassName="scale-[1.06]"
                 />
               </div>
             </div>
@@ -216,7 +211,6 @@ export function HeroSection() {
               <WallpaperLayers
                 currentIndex={currentIndex}
                 incomingIndex={incomingIndex}
-                overlayVisible={overlayVisible}
                 className="absolute inset-0"
               />
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.12),transparent_26%,transparent_72%,rgba(15,23,42,0.18))]" />
@@ -255,29 +249,7 @@ export function HeroSection() {
                 aria-label={`Show ${wallpaper.label} wallpaper`}
                 onClick={() => {
                   if (index === currentIndex) return
-
-                  if (fadeRafRef.current != null) {
-                    cancelAnimationFrame(fadeRafRef.current)
-                    fadeRafRef.current = null
-                  }
-
-                  if (fadeTimeoutRef.current != null) {
-                    window.clearTimeout(fadeTimeoutRef.current)
-                    fadeTimeoutRef.current = null
-                  }
-
-                  setIncomingIndex(index)
-                  setOverlayVisible(false)
-
-                  fadeRafRef.current = requestAnimationFrame(() => {
-                    setOverlayVisible(true)
-                  })
-
-                  fadeTimeoutRef.current = window.setTimeout(() => {
-                    setCurrentIndex(index)
-                    setIncomingIndex(null)
-                    setOverlayVisible(false)
-                  }, 1200)
+                  startTransition(index)
                 }}
                 className={`h-1.5 rounded-full transition-all ${
                   currentIndex === index ? "w-8 bg-slate-900 dark:bg-white" : "w-3 bg-slate-400/70 hover:bg-slate-500 dark:bg-slate-600 dark:hover:bg-slate-400"

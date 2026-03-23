@@ -168,6 +168,15 @@
     }
   }
 
+  @keyframes hero-crossfade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
   @keyframes marquee-up {
     0% {
       transform: translateY(0);
@@ -192,6 +201,10 @@
 
   .animate-marquee-down {
     animation: marquee-down 60s linear infinite;
+  }
+
+  .hero-crossfade-in {
+    animation: hero-crossfade-in 1200ms ease-out forwards;
   }
 
   @keyframes marquee {
@@ -257,16 +270,17 @@
     mask-image: radial-gradient(ellipse 82% 70% at center, rgba(0, 0, 0, 0.94) 0%, rgba(0, 0, 0, 0.72) 36%, rgba(0, 0, 0, 0.34) 62%, rgba(0, 0, 0, 0.12) 78%, transparent 100%);
     animation: hero-screen-glow 8s ease-in-out infinite;
     transform-origin: center;
+    transform: scale(1.16);
     will-change: transform, opacity;
   }
 
   @keyframes hero-screen-glow {
     0%,
     100% {
-      transform: scale(0.98);
+      transform: scale(1.14);
     }
     50% {
-      transform: scale(1.03);
+      transform: scale(1.19);
     }
   }
 }
